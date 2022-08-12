@@ -19,8 +19,8 @@ app.get("/api/date?", (req, res) =>{
 
 app.get("/api", (req, res) =>{
   res.send({
-    unix: 0,
-    utc: moment(0, 'x')
+    unix: moment().unix,
+    utc: moment()
   });
 })
 
@@ -41,7 +41,7 @@ app.get("/api/:id", (req, res) =>{
       }
     }
     else{
-      res.status(400).send('Invalid Date');
+      res.status(400).send({error: 'Invalid Date'});
       return;
       }
 
