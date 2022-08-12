@@ -19,7 +19,7 @@ app.get("/api/date?", (req, res) =>{
 
 app.get("/api", (req, res) =>{
   res.send({
-    unix: moment().unix,
+    unix: moment().unix(),
     utc: moment()
   });
 })
