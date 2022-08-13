@@ -6,6 +6,9 @@ const port = process.env.PORT || 3000;
 
 const PATH = __dirname + "/index.html";
 
+var cors = require('cors');
+app.use(cors({optionsSuccessStatus: 200}));
+
 app.get("/", (req, res) =>{
  res.sendFile(PATH);
 });
@@ -18,7 +21,7 @@ app.get("/api/date_string", (req, res) =>{
 
 app.get("/api", (req, res) =>{
   res.send({
-    unix: new Date().valueOf(),
+    unix: parseInt(new Date().valueOf()),
     utc: new Date().toUTCString()
   });
 })
@@ -29,13 +32,13 @@ app.get("/api/:date_string", (req, res) =>{
 
     if (moment(inputDate).isValid()) {
       date = {
-        unix: new Date(inputDate).valueOf(),
+        unix: parseInt(new Date(inputDate).valueOf()),
         utc: new Date(parseInt(new Date(inputDate).valueOf())).toUTCString()
       } 
     } 
     else if (moment(parseInt(inputDate), 'x').isValid()) {
       date = {
-        unix: inputDate,
+        unix: parseInt(inputDate),
         utc: new Date(parseInt(inputDate)).toUTCString()
       }
     }
@@ -44,7 +47,7 @@ app.get("/api/:date_string", (req, res) =>{
       return;
       }
 
-    res.json(date); 
+    res.send(date); 
 });
 
 app.listen(port);
