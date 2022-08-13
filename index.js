@@ -10,34 +10,33 @@ app.get("/", (req, res) =>{
  res.sendFile(PATH);
 });
 
-app.get("/api/date?", (req, res) =>{
-  res.send({
-    unix: 0,
-    utc: moment(0, 'x')
-  });
+app.get("/api/date_string", (req, res) =>{
+  res.json(
+    moment(0, 'x').format('ddd, D MMM YYYY HH:mm:ss') + ' GMT'
+  );
 })
 
 app.get("/api", (req, res) =>{
   res.send({
-    unix: moment().unix(),
-    utc: moment()
+    unix: new Date().valueOf(),
+    utc: new Date().toUTCString()
   });
 })
 
-app.get("/api/:id", (req, res) =>{
+app.get("/api/:date_string", (req, res) =>{
   let date;
-    const inputDate = req.params.id;
+    const inputDate = req.params.date_string ;
 
     if (moment(inputDate).isValid()) {
       date = {
-        unix: moment(inputDate, 'MM-DD-YYYY').unix() * 1000,
-        utc: moment(inputDate, 'MM-DD-YYYY')
+        unix: new Date(inputDate).valueOf(),
+        utc: new Date(parseInt(new Date(inputDate).valueOf())).toUTCString()
       } 
     } 
     else if (moment(parseInt(inputDate), 'x').isValid()) {
       date = {
         unix: inputDate,
-        utc: moment(inputDate, 'x')
+        utc: new Date(parseInt(inputDate)).toUTCString()
       }
     }
     else{
@@ -45,7 +44,7 @@ app.get("/api/:id", (req, res) =>{
       return;
       }
 
-    res.send(date); 
+    res.json(date); 
 });
 
 app.listen(port);
